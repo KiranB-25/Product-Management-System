@@ -8,15 +8,11 @@ type UpdateProductBody = Partial<Omit<IProduct, "_id">> & {
   visibility?: boolean;
 };
 
-// Explicit type for context param
-interface RouteContext {
-  params: {
-    id: string;
-  };
-}
-
 // GET product by ID
-export async function GET(req: Request, { params }: RouteContext) {
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   await connectDB();
 
   const { id } = params;
@@ -45,7 +41,10 @@ export async function GET(req: Request, { params }: RouteContext) {
 }
 
 // PATCH (update) product by ID
-export async function PATCH(req: Request, { params }: RouteContext) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   await connectDB();
 
   const { id } = params;
@@ -79,7 +78,10 @@ export async function PATCH(req: Request, { params }: RouteContext) {
 }
 
 // DELETE product by ID
-export async function DELETE(req: Request, { params }: RouteContext) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   await connectDB();
 
   const { id } = params;

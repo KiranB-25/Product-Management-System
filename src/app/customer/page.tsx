@@ -1,32 +1,34 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-type Product = {
+interface Product {
   _id: string;
   name: string;
   price: number;
   description: string;
-  imageUrl: string;
+  imageUrl?: string; // make optional to avoid runtime issues
   visibility: boolean;
-};
+}
 
 export default function CustomerPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
 
   // Fetch products from admin panel
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/products"); // your admin API
+      const res = await fetch("/api/products");
+      if (!res.ok) throw new Error("Failed to fetch"); // ✅ safety
       const data: Product[] = await res.json();
-      setProducts(data.filter((p) => p.visibility)); // Only visible products for customer
+      setProducts(data.filter((p) => p.visibility)); // ✅ show only visible
     } catch (err) {
       console.error(err);
       toast.error("Failed to fetch products");
@@ -82,11 +84,15 @@ export default function CustomerPage() {
             >
               {/* Image Section */}
               <CardHeader className="p-0 rounded-t-xl overflow-hidden relative">
-                <img
-                  src={product.imageUrl || "https://via.placeholder.com/300"}
-                  alt={product.name}
-                  className="w-full h-48 sm:h-56 md:h-52 lg:h-56 xl:h-64 object-cover"
-                />
+                <div className="relative w-full h-48 sm:h-56 md:h-52 lg:h-56 xl:h-64">
+                  <Image
+                    src={product.imageUrl || "https://via.placeholder.com/300"}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+                  />
+                </div>
                 {/* Hover Description Overlay */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-2 sm:p-4 text-white text-xs sm:text-sm md:text-base text-center rounded-t-xl">
                   {product.description}

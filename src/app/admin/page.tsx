@@ -244,6 +244,7 @@ export default function AdminPage() {
                 className={`${i % 2 === 0 ? "bg-gray-100" : ""} hover:bg-none`}
               >
                 <TableCell>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={p.imageUrl || "https://via.placeholder.com/150"}
                     alt={p.name}
@@ -369,7 +370,10 @@ export default function AdminPage() {
               {/* Image Preview */}
               <div className="w-full h-40 border rounded flex items-center justify-center overflow-hidden">
                 {form.imageUrl ? (
-                  <img src={form.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                  <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={form.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                  </>
                 ) : (
                   <span className="text-gray-400 text-sm">Image preview</span>
                 )}
@@ -410,6 +414,7 @@ export default function AdminPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left: Product Image */}
             <div className="relative flex items-center justify-center bg-white p-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={viewProduct?.imageUrl || "https://via.placeholder.com/400"}
                 alt={viewProduct?.name}

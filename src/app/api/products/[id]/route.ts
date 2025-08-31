@@ -9,9 +9,12 @@ type UpdateProductBody = Partial<Omit<IProduct, "_id">> & {
 };
 
 // GET /api/products/[id]
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   await connectDB();
-  const { id } = params;
+  const { id } = await params; // 👈 must await
 
   if (!Types.ObjectId.isValid(id)) {
     return NextResponse.json({ success: false, error: "Invalid ID" }, { status: 400 });
@@ -29,9 +32,12 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
 // PATCH /api/products/[id]
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   await connectDB();
-  const { id } = params;
+  const { id } = await params;
 
   if (!Types.ObjectId.isValid(id)) {
     return NextResponse.json({ success: false, error: "Invalid ID" }, { status: 400 });
@@ -54,9 +60,12 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 }
 
 // DELETE /api/products/[id]
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   await connectDB();
-  const { id } = params;
+  const { id } = await params;
 
   if (!Types.ObjectId.isValid(id)) {
     return NextResponse.json({ success: false, error: "Invalid ID" }, { status: 400 });

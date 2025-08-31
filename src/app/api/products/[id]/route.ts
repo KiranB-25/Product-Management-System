@@ -8,14 +8,18 @@ type UpdateProductBody = Partial<Omit<IProduct, "_id">> & {
   visibility?: boolean;
 };
 
+// Explicit type for context param
+interface RouteContext {
+  params: {
+    id: string;
+  };
+}
+
 // GET product by ID
-export async function GET(
-  req: Request,
-  context: { params: { id: string } }
-) {
+export async function GET(req: Request, { params }: RouteContext) {
   await connectDB();
 
-  const { id } = context.params;
+  const { id } = params;
   if (!Types.ObjectId.isValid(id)) {
     return NextResponse.json(
       { success: false, error: "Invalid ID" },
@@ -32,7 +36,7 @@ export async function GET(
       );
     }
     return NextResponse.json({ success: true, product });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "Server error" },
       { status: 500 }
@@ -41,13 +45,10 @@ export async function GET(
 }
 
 // PATCH (update) product by ID
-export async function PATCH(
-  req: Request,
-  context: { params: { id: string } }
-) {
+export async function PATCH(req: Request, { params }: RouteContext) {
   await connectDB();
 
-  const { id } = context.params;
+  const { id } = params;
   if (!Types.ObjectId.isValid(id)) {
     return NextResponse.json(
       { success: false, error: "Invalid ID" },
@@ -69,7 +70,7 @@ export async function PATCH(
     }
 
     return NextResponse.json({ success: true, product: updatedProduct });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "Server error" },
       { status: 500 }
@@ -78,13 +79,10 @@ export async function PATCH(
 }
 
 // DELETE product by ID
-export async function DELETE(
-  req: Request,
-  context: { params: { id: string } }
-) {
+export async function DELETE(req: Request, { params }: RouteContext) {
   await connectDB();
 
-  const { id } = context.params;
+  const { id } = params;
   if (!Types.ObjectId.isValid(id)) {
     return NextResponse.json(
       { success: false, error: "Invalid ID" },
@@ -105,7 +103,7 @@ export async function DELETE(
       success: true,
       message: "Product deleted successfully",
     });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "Server error" },
       { status: 500 }

@@ -101,7 +101,13 @@ export default function AdminPage() {
       fetchProducts();
       setModalOpen(false);
       setEditingProduct(null);
-      setForm({ name: "", price: 0, description: "", imageUrl: "", visibility: true });
+      setForm({
+        name: "",
+        price: 0,
+        description: "",
+        imageUrl: "",
+        visibility: true,
+      });
     } catch (err) {
       console.error(err);
       toast.error("Operation failed!");
@@ -160,7 +166,13 @@ export default function AdminPage() {
             onClick={() => {
               setEditingProduct(null);
               setModalOpen(true);
-              setForm({ name: "", price: 0, description: "", imageUrl: "", visibility: true });
+              setForm({
+                name: "",
+                price: 0,
+                description: "",
+                imageUrl: "",
+                visibility: true,
+              });
             }}
           >
             + Add New
@@ -227,7 +239,10 @@ export default function AdminPage() {
           </TableHeader>
           <TableBody>
             {paginated.map((p, i) => (
-              <TableRow key={p._id} className={`${i % 2 === 0 ? "bg-gray-100" : ""} hover:bg-none`}>
+              <TableRow
+                key={p._id}
+                className={`${i % 2 === 0 ? "bg-gray-100" : ""} hover:bg-none`}
+              >
                 <TableCell>
                   <img
                     src={p.imageUrl || "https://via.placeholder.com/150"}
@@ -272,14 +287,18 @@ export default function AdminPage() {
         <span>
           Page {page} of {totalPages}
         </span>
-        <Button disabled={page === totalPages} onClick={() => setPage((p) => p + 1)} variant="outline">
+        <Button
+          disabled={page === totalPages}
+          onClick={() => setPage((p) => p + 1)}
+          variant="outline"
+        >
           Next
         </Button>
       </div>
 
       {/* Add/Edit Modal */}
       <Dialog open={modalOpen} onOpenChange={() => setModalOpen(false)}>
-        <DialogContent className="max-w-15xl w-full max-h-[90vh] overflow-y-auto rounded-2xl shadow-xl">
+        <DialogContent className="w-full max-w-[95vw] sm:max-w-3xl lg:max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">
               {editingProduct ? "Edit Product" : "Add New Product"}
@@ -289,7 +308,7 @@ export default function AdminPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
             {/* BASIC INFORMATION */}
             <div className="flex flex-col gap-4">
               <h3 className="text-sm font-semibold border-b pb-1">BASIC INFORMATION</h3>
@@ -298,14 +317,12 @@ export default function AdminPage() {
                 value={form.name}
                 onChange={(e) => handleFormChange("name", e.target.value)}
               />
-              {/* ✅ Fixed Price input with arrows enabled */}
               <Input
                 type="number"
                 placeholder="0.00"
                 value={form.price}
                 onChange={(e) => handleFormChange("price", Number(e.target.value))}
                 min={0}
-                step=""
               />
               <div>
                 <label className="block text-sm font-semibold mb-1">Visibility</label>
@@ -387,9 +404,9 @@ export default function AdminPage() {
         </DialogContent>
       </Dialog>
 
-      {/* ✅ Redesigned View Modal */}
+      {/* View Modal */}
       <Dialog open={!!viewProduct} onOpenChange={() => setViewProduct(null)}>
-        <DialogContent className="max-w-4xl w-full rounded-2xl shadow-lg overflow-hidden">
+        <DialogContent className="w-full max-w-[95vw] sm:max-w-2xl lg:max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left: Product Image */}
             <div className="relative flex items-center justify-center bg-white p-4">
@@ -407,22 +424,17 @@ export default function AdminPage() {
 
             {/* Right: Product Info */}
             <div className="flex flex-col justify-between p-4">
-              {/* Name + Price */}
               <div className="flex flex-col gap-3">
                 <h2 className="text-2xl font-bold text-gray-800">{viewProduct?.name}</h2>
                 <p className="text-green-600 font-bold text-3xl">
                   ${viewProduct?.price?.toFixed(2)}
                 </p>
 
-                {/* Description */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <p className="text-sm text-gray-800 font-semibold mb-1 flex items-center gap-1">
-                    Product Description
-                  </p>
+                  <p className="text-sm text-gray-800 font-semibold mb-1">Product Description</p>
                   <p className="text-gray-700 text-sm">{viewProduct?.description}</p>
                 </div>
 
-                {/* Price + Stock Status */}
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div className="bg-green-100 text-green-800 p-3 rounded-lg flex flex-col items-center">
                     <span className="text-xs font-semibold">Price</span>
@@ -438,7 +450,6 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Visibility */}
                 <div className="bg-blue-100 text-blue-800 p-3 rounded-lg flex flex-col items-center mt-4">
                   <span className="text-xs font-semibold">Product Visibility</span>
                   <span className="text-lg font-bold">
@@ -449,7 +460,6 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Close Button */}
               <Button className="mt-6 w-full" onClick={() => setViewProduct(null)}>
                 Close
               </Button>
